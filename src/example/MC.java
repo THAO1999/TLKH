@@ -1,5 +1,7 @@
 package example;
 
+import java.util.Scanner;
+
 public class MC {
 	private int ID;
 	private Float oX;
@@ -36,4 +38,15 @@ public class MC {
 	public void setEnergy(Float energy) {
 		this.energy = energy;
 	}
+	  
+    // get data of MC from file data
+    public static MC readFileDataIntoMC(Scanner scanner) {
+    			MC mc=new MC();
+    			String line = scanner.nextLine();
+		 	  	String str[] = line.split(" ");
+		 	  	mc.setoX(Float.parseFloat( str[0]));
+		 	  	mc.setoY(Float.parseFloat( str[1]));
+		 	//   System.out.println(mc.getoX());
+         return mc;
+    }
 }
