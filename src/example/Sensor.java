@@ -110,7 +110,7 @@ public class Sensor extends Thread {
  public static void calculateRemainingEnergyOfSensorNode(ArrayList<Sensor> sensors) {
  	 LocalTime myObj = LocalTime.now();
  	int i=0, length=sensors.size(); 
- 	 System.out.println(myObj);
+ 	 System.out.println("thread 1: "+ myObj);
  	Float ergyConsumption,remainingEnergy; // khởi tao năng lương tiêu thụ , năng lương còn lại
    for (; i < length ; i++) {
  	  if(sensors.get(i).getSentRequest()==0) // kiểm tra xem sensor đã gửi yêu cầu hay chưa, nếu chưa gửi yc thì tính năng lượng
