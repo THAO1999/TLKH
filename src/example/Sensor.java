@@ -14,7 +14,10 @@ public class Sensor extends Thread {
 	private Float energy;
 	private int sentRequest;
 	private long dateRequest;
-//	public static   ArrayList<Sensor> sensorsRequest = new ArrayList<Sensor>(); // làm hơi củ chuối
+	public static   ArrayList<Sensor> sensors; // làm hơi củ chuối
+	  public Sensor() {
+		  sensors=new ArrayList<Sensor>();
+	  }
 	public int getID() {
 		return ID;
 	}
@@ -115,7 +118,7 @@ public class Sensor extends Thread {
    for (; i < length ; i++) {
  	  if(sensors.get(i).getSentRequest()==0) // kiểm tra xem sensor đã gửi yêu cầu hay chưa, nếu chưa gửi yc thì tính năng lượng
  	  {
- 	 ergyConsumption =sensors.get(i).getP() * 1000000; // năng lượng tiêu thụ trong 1000000s
+ 	 ergyConsumption =sensors.get(i).getP() * 100000; // năng lượng tiêu thụ trong 100000s
  	 remainingEnergy=sensors.get(i).getEnergy() - ergyConsumption;  // năng lương còn lại
  	 sensors.get(i).setEnergy(remainingEnergy); // lưu năng lượng còn lại
  	 if(remainingEnergy < 4320) { // nếu năng lượng nhỏ hơn ngưỡng
@@ -129,7 +132,8 @@ public class Sensor extends Thread {
  }
  // sensor gửi yêu cầu sạc đến MC
  public static  void  requiresRecharging(Sensor sensor) {
-	 ArrayList<Sensor> sensorsRequest = new ArrayList<Sensor>(); 
-	 sensorsRequest.add(sensor);  // add  into list sensor waiting for charging
+	 sensors.add(sensor);  // add  into list sensor waiting for charging
+	 System.out.println("thread 1: "+ sensors.size());
+
  }
 }
