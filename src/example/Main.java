@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalTime; 
 import java.util.concurrent.TimeUnit;
-public class Example extends Thread{
+public class Main extends Thread{
 
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
     	ArrayList<Sensor> sensors; 
@@ -48,7 +48,7 @@ public class Example extends Thread{
     }
     // sensor gửi yêu cầu sạc đến MC
     public static void requiresRecharging(Sensor sensor) {
-    	  System.out.println(sensor.getID());
+    	  System.out.println("sensorID: " + sensor.getID());
     }
     
 }
