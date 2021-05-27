@@ -1,15 +1,20 @@
 package example;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-public class Sensor {
+import java.util.Scanner;
+public class Sensor extends Thread {
 	private int ID;
 	private Float oX;
 	private Float oY;
 	private Float P;
 	private Float energy;
 	private int sentRequest;
+	private long dateRequest;
+//	public static   ArrayList<Sensor> sensorsRequest = new ArrayList<Sensor>(); // làm hơi củ chuối
 	public int getID() {
 		return ID;
 	}
@@ -43,17 +48,50 @@ public class Sensor {
 	public int getSentRequest() {
 		return sentRequest;
 	}
-	public void setSentRequest(int iD) {
-		this.sentRequest = iD;
+	public void setSentRequest(int dateRequest) {
+		this.sentRequest = dateRequest;
+	}
+	
+	public long getdateRequest() {
+		return dateRequest;
+	}
+	public void setdateRequest(long dateRequest) {
+		this.dateRequest = dateRequest;
 	}
 
+	@Override
+	public void run() {
+		ArrayList<Sensor> sensors = new ArrayList<Sensor>();
+		Scanner scanner;
+		try {
+			scanner = new Scanner(new File("data.txt"));
+			sensors=readFileDataIntoSenser(scanner);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int i=0;
+    	for(;i<7;i++) {
+    		    try {
+    		    	 Thread.sleep(10000); // 10s
+                 calculateRemainingEnergyOfSensorNode(sensors);
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                }
+    	}
+    	
+		
+	}
+	
+	
 // get data of Sensers from file data
  public static ArrayList<Sensor> readFileDataIntoSenser(Scanner scanner) {
  	ArrayList<Sensor> sensors = new ArrayList<Sensor>();
  	int i=1;
+ 	 String line = scanner.nextLine();
  	 while (scanner.hasNextLine()) {
  		        Sensor sensor=new Sensor();
- 		        String line = scanner.nextLine();
+ 		         line = scanner.nextLine();
 		 	    String str[] = line.split(" ");
 		 	    sensor.setID(i);
 		 	  	sensor.setoX(Float.parseFloat( str[0]));
@@ -66,5 +104,32 @@ public class Sensor {
 		 }
 		 scanner.close();
       return sensors;
+ }
+ 
+ // tính năng lượng còn lại của sensor
+ public static void calculateRemainingEnergyOfSensorNode(ArrayList<Sensor> sensors) {
+ 	 LocalTime myObj = LocalTime.now();
+ 	int i=0, length=sensors.size(); 
+ 	 System.out.println(myObj);
+ 	Float ergyConsumption,remainingEnergy; // khởi tao năng lương tiêu thụ , năng lương còn lại
+   for (; i < length ; i++) {
+ 	  if(sensors.get(i).getSentRequest()==0) // kiểm tra xem sensor đã gửi yêu cầu hay chưa, nếu chưa gửi yc thì tính năng lượng
+ 	  {
+ 	 ergyConsumption =sensors.get(i).getP() * 1000000; // năng lượng tiêu thụ trong 1000000s
+ 	 remainingEnergy=sensors.get(i).getEnergy() - ergyConsumption;  // năng lương còn lại
+ 	 sensors.get(i).setEnergy(remainingEnergy); // lưu năng lượng còn lại
+ 	 if(remainingEnergy < 4320) { // nếu năng lượng nhỏ hơn ngưỡng
+ 		 sensors.get(i).setSentRequest(1); // đánh dấu sensor đã gửi yêu cầu
+ 		 long dateRequest = System.currentTimeMillis( );
+ 		 sensors.get(i).setdateRequest(dateRequest);// thời điểm sensor gửi yc sạc
+ 		 requiresRecharging(sensors.get(i));   
+ 	 }
+   }
+   }
+ }
+ // sensor gửi yêu cầu sạc đến MC
+ public static  void  requiresRecharging(Sensor sensor) {
+	 ArrayList<Sensor> sensorsRequest = new ArrayList<Sensor>(); 
+	 sensorsRequest.add(sensor);  // add  into list sensor waiting for charging
  }
 }
