@@ -14,7 +14,7 @@ public class Sensor extends Thread {
 	private Float energy;
 	private int sentRequest;
 	private long dateRequest;
-	public static   ArrayList<Sensor> sensors; // làm hơi củ chuối
+	public static  ArrayList<Sensor> sensors; // làm hơi củ chuối
 	  public Sensor() {
 		  sensors=new ArrayList<Sensor>();
 	  }
@@ -74,18 +74,17 @@ public class Sensor extends Thread {
 			e.printStackTrace();
 		}
 		int i=0;
-    	for(;i<7;i++) {
+    	for(;i<100;i++) {
     		    try {
-    		    	 Thread.sleep(10000); // 10s
-                 calculateRemainingEnergyOfSensorNode(sensors);
+    		    	 Thread.sleep(1000); // 1s
+    		    	calculateRemainingEnergyOfSensorNode(sensors);
+    		    	
                 } catch (InterruptedException e) {
                     System.out.println(e);
                 }
     	}
     	
-		
 	}
-	
 	
 // get data of Sensers from file data
  public static ArrayList<Sensor> readFileDataIntoSenser(Scanner scanner) {
@@ -118,7 +117,7 @@ public class Sensor extends Thread {
    for (; i < length ; i++) {
  	  if(sensors.get(i).getSentRequest()==0) // kiểm tra xem sensor đã gửi yêu cầu hay chưa, nếu chưa gửi yc thì tính năng lượng
  	  {
- 	 ergyConsumption =sensors.get(i).getP() * 100000; // năng lượng tiêu thụ trong 100000s
+ 	 ergyConsumption =sensors.get(i).getP() * 10000; // năng lượng tiêu thụ trong 10000s
  	 remainingEnergy=sensors.get(i).getEnergy() - ergyConsumption;  // năng lương còn lại
  	 sensors.get(i).setEnergy(remainingEnergy); // lưu năng lượng còn lại
  	 if(remainingEnergy < 4320) { // nếu năng lượng nhỏ hơn ngưỡng
@@ -133,7 +132,7 @@ public class Sensor extends Thread {
  // sensor gửi yêu cầu sạc đến MC
  public static  void  requiresRecharging(Sensor sensor) {
 	 sensors.add(sensor);  // add  into list sensor waiting for charging
-	 System.out.println("thread 1: "+ sensors.size());
+	 System.out.println("thread 1: "+ sensor.getEnergy() + "ID:"+sensor.getID());
 
  }
 }

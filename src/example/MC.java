@@ -38,7 +38,6 @@ public class MC {
 	public void setEnergy(Float energy) {
 		this.energy = energy;
 	}
-	  
     // get data of MC from file data
     public static MC readFileDataIntoMC(Scanner scanner) {
     			MC mc=new MC();
